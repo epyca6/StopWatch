@@ -66,9 +66,9 @@ namespace StopWatch
                 // Unhandled till I am not an expert of thread handling.
                 try
                 {
-                    thread1.Abort();
+                    thread1.Abort();    //TODO: Causing SYSLIB0006 warning: Obsolete code. Rework in the future
                 }
-                catch (Exception ex)
+                catch   //removed for warning elimination
                 {
                     // Do nothing
                 }
