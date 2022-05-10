@@ -4,10 +4,10 @@ namespace StopWatch
     public class StopWatchThreaded
     {
         // static field for thread access
-        static private bool _isRunning;
-        static private DateTime _startDate;
-        private Thread thread1 = new Thread(_updateConsoleWithStopper);
-        
+        static private bool _isRunning = false;
+        static private DateTime _startDate = DateTime.Now;
+        //private Thread thread1 = new Thread(_updateConsoleWithStopper);
+        private Task _task1 = Task.Run(() => _updateConsoleWithStopper());
         // Interfaces may can extend STOPWatch in the future ;)
 
         private static void _updateConsoleWithStopper()
@@ -34,19 +34,16 @@ namespace StopWatch
                 _isRunning = true;
                 Console.WriteLine("StopWatch is started: {0}", _startDate);
 
-                // Create the thread and start
-                // Important to trecreate it after abort is done
-                // maybe a legacy solution, but was fun to check it out
-                thread1 = new Thread(_updateConsoleWithStopper);
-                thread1.Start();
-
+                // Removed Thread Start
+                // Makes no sense in this terminology
+                _task1 = Task.Run(() => _updateConsoleWithStopper());
             }
             else
             {
                 // I dont wanted to exlude the opportunity to restart the stopwatch
                 // with error throwing. Instead of just notify the user.
                 //throw new InvalidOperationException("Stopper is allready running");
-                Console.Write("\n\t\t\t\t\tSector Time\r");
+                Console.Write("\t\t\t\t\tSector Time\n\r");
             }            
         }
 
@@ -60,22 +57,13 @@ namespace StopWatch
                 dif = _startDate - now;
                 Console.WriteLine("Stop watch stopped at: {0} \nElapsed time: {1}",now, dif);
                 _isRunning = false;
-                
-                // 0 day hack, to let the program run, but not crash
-                // after Abortiont throws a default exception.
-                // Unhandled till I am not an expert of thread handling.
-                try
-                {
-                    thread1.Abort();    //TODO: Causing SYSLIB0006 warning: Obsolete code. Rework in the future
-                }
-                catch   //removed for warning elimination
-                {
-                    // Do nothing
-                }
+                // Task abortion removed from here. 
+                // Makes no sense in this term.
             }
             else
             {
-                Console.WriteLine("StopWatch allready stopped");
+                // Informs user that stop watch is standing still
+                Console.Write("StopWatch allready stopped\r");
             }
         }
     }
