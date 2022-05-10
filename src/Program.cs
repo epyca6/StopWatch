@@ -23,6 +23,7 @@
                 // Get key from stdin
                 stdin = Console.ReadKey(true).Key;
 
+                // Select between Stopper functions
                 switch (stdin)
                 {
                     case ConsoleKey.S:
@@ -34,7 +35,7 @@
                     default:
                         break;
                 }
-
+                // Escape condition
             } while ( stdin != ConsoleKey.Escape);
         }
 
